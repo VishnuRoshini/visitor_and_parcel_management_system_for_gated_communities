@@ -1,0 +1,119 @@
+.admin-query-container {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Stats row */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+
+  @media (max-width: 768px) { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 480px) { grid-template-columns: 1fr; }
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+
+  mat-icon {
+    font-size: 36px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    padding: 8px;
+    color: white;
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stat-number {
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: rgba(0,0,0,.55);
+  }
+
+  &.total   mat-icon { background: #1565c0; }
+  &.pending mat-icon { background: #f9a825; }
+  &.resolved mat-icon { background: #2e7d32; }
+  &.high    mat-icon { background: #c62828; }
+}
+
+/* Filters */
+.filter-card .filters-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+
+  .search-field { flex: 1; min-width: 200px; }
+  mat-form-field { min-width: 140px; }
+}
+
+/* Table */
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 48px;
+}
+
+.table-wrapper { overflow-x: auto; }
+
+.queries-table {
+  width: 100%;
+
+  .resident-cell {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    mat-icon { font-size: 18px; color: rgba(0,0,0,.45); }
+  }
+
+  .title-cell {
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .table-row {
+    cursor: pointer;
+    &:hover { background: rgba(25, 118, 210, .04); }
+  }
+}
+
+.chip {
+  border-radius: 12px;
+  padding: 3px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+
+.no-data-row td {
+  padding: 0;
+  .no-data {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 48px;
+    color: rgba(0,0,0,.4);
+    mat-icon { font-size: 24px; }
+  }
+}

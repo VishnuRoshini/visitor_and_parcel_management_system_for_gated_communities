@@ -1,0 +1,94 @@
+.user-management {
+  padding: 24px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+
+  .header-content {
+    h1 {
+      margin: 0 0 4px;
+      font-size: 28px;
+      font-weight: 600;
+      color: #1E293B;
+    }
+
+    p {
+      margin: 0;
+      color: #64748B;
+    }
+  }
+}
+
+.users-card {
+  .search-field {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 16px;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    padding: 48px;
+  }
+
+  .no-data {
+    text-align: center;
+    padding: 48px;
+    color: #64748B;
+  }
+}
+
+.role-chip {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+
+  &.admin {
+    background-color: #FEE2E2;
+    color: #DC2626;
+  }
+
+  &.security {
+    background-color: #FEF3C7;
+    color: #D97706;
+  }
+
+  &.resident {
+    background-color: #DBEAFE;
+    color: #2563EB;
+  }
+}
+
+.status-chip {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+
+  &.active {
+    background-color: #D1FAE5;
+    color: #059669;
+  }
+
+  &.inactive {
+    background-color: #F3F4F6;
+    color: #6B7280;
+  }
+}
+
+.text-danger {
+  color: #DC2626 !important;
+}

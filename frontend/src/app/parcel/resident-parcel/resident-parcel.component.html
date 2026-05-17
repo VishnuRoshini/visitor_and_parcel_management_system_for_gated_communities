@@ -1,0 +1,120 @@
+<div class="page-container">
+  <!-- Pending Parcels Section -->
+  <mat-card class="pending-card" *ngIf="pendingParcels.length > 0">
+    <div class="card-header pending-header">
+      <h2>
+        <mat-icon>markunread_mailbox</mat-icon>
+        Pending Parcels
+        <span class="badge">{{ pendingParcels.length }}</span>
+      </h2>
+    </div>
+
+    <div class="pending-list">
+      <div class="parcel-card" *ngFor="let parcel of pendingParcels">
+        <div class="parcel-info">
+          <div class="parcel-icon">
+            <mat-icon>inventory_2</mat-icon>
+          </div>
+          <div class="parcel-details">
+            <h3>{{ parcel.name }}</h3>
+            <p class="description" *ngIf="parcel.purpose_or_description">
+              {{ parcel.purpose_or_description }}
+            </p>
+            <div class="meta">
+              <span>
+                <mat-icon>person</mat-icon>
+                Received by {{ parcel.guard_name }}
+              </span>
+              <span>
+                <mat-icon>schedule</mat-icon>
+                {{ formatDate(parcel.created_at) }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="parcel-actions">
+          <app-status-badge [status]="parcel.status"></app-status-badge>
+          <div class="action-buttons">
+            <button 
+              mat-raised-button 
+              color="primary" 
+              *ngIf="parcel.status === 'RECEIVED'"
+              (click)="acknowledgeParcel(parcel)">
+              <mat-icon>thumb_up</mat-icon>
+              Acknowledge
+            </button>
+            <button 
+              mat-raised-button 
+              color="primary" 
+              *ngIf="parcel.status === 'ACKNOWLEDGED'"
+              (click)="collectParcel(parcel)">
+              <mat-icon>check_circle</mat-icon>
+              Collected
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+
+  <!-- All Parcels History -->
+  <mat-card>
+    <div class="card-header">
+      <h2>
+        <mat-icon>history</mat-icon>
+        Parcel History
+      </h2>
+    </div>
+
+    <div class="card-content">
+      <app-loading-spinner *ngIf="isLoading" message="Loading parcels..."></app-loading-spinner>
+
+      <ng-container *ngIf="!isLoading">
+        <app-empty-state
+          *ngIf="allParcels.length === 0"
+          icon="inventory_2"
+          title="No Parcels Yet"
+          message="Your parcel history will appear here.">
+        </app-empty-state>
+
+        <div class="table-container" *ngIf="allParcels.length > 0">
+          <table mat-table [dataSource]="allParcels">
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Sender/Source</th>
+              <td mat-cell *matCellDef="let parcel">{{ parcel.name }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="description">
+              <th mat-header-cell *matHeaderCellDef>Description</th>
+              <td mat-cell *matCellDef="let parcel">
+                {{ parcel.purpose_or_description || '-' }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let parcel">
+                <app-status-badge [status]="parcel.status"></app-status-badge>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="received_by">
+              <th mat-header-cell *matHeaderCellDef>Received By</th>
+              <td mat-cell *matCellDef="let parcel">{{ parcel.guard_name }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="created_at">
+              <th mat-header-cell *matHeaderCellDef>Date</th>
+              <td mat-cell *matCellDef="let parcel">
+                {{ formatDate(parcel.created_at) }}
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="['name', 'description', 'status', 'received_by', 'created_at']"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['name', 'description', 'status', 'received_by', 'created_at'];"></tr>
+          </table>
+        </div>
+      </ng-container>
+    </div>
+  </mat-card>
+</div>

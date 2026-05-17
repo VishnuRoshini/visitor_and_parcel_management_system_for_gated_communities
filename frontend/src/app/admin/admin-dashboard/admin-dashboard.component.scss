@@ -1,0 +1,160 @@
+.quick-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+
+  button {
+    mat-icon {
+      margin-right: 8px;
+    }
+  }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  mat-card-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px !important;
+  }
+
+  .stat-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    mat-icon {
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
+      color: white;
+    }
+  }
+
+  .stat-info {
+    h3 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    p {
+      margin: 4px 0 0;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+  }
+
+  &.visitors .stat-icon {
+    background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+  }
+
+  &.parcels .stat-icon {
+    background: linear-gradient(135deg, #16A34A 0%, #15803D 100%);
+  }
+
+  &.pending .stat-icon {
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  }
+
+  &.parcels-pending .stat-icon {
+    background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+  }
+}
+
+.breakdown-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-color);
+
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+
+    mat-icon {
+      color: var(--accent-color);
+    }
+  }
+}
+
+.status-list {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.status-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #F8FAFC;
+  border-radius: 8px;
+
+  .count {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+}
+
+.card-content {
+  padding: 0;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+
+  mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+  }
+
+  &.visitor {
+    background-color: #DBEAFE;
+    color: #1E40AF;
+  }
+
+  &.parcel {
+    background-color: #D1FAE5;
+    color: #065F46;
+  }
+}

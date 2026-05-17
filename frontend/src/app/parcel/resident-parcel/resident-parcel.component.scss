@@ -1,0 +1,150 @@
+.page-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-color);
+
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+
+    mat-icon {
+      color: var(--accent-color);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 24px;
+      height: 24px;
+      padding: 0 8px;
+      background-color: var(--accent-color);
+      color: white;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+  }
+}
+
+.pending-header {
+  background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+}
+
+.pending-list {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.parcel-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: #F8FAFC;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: var(--shadow-md);
+  }
+}
+
+.parcel-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.parcel-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  mat-icon {
+    color: white;
+    font-size: 24px;
+  }
+}
+
+.parcel-details {
+  h3 {
+    margin: 0 0 4px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .description {
+    margin: 0 0 8px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  .meta {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--text-secondary);
+
+    span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      mat-icon {
+        font-size: 14px;
+        width: 14px;
+        height: 14px;
+      }
+    }
+  }
+}
+
+.parcel-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+
+  button {
+    mat-icon {
+      margin-right: 4px;
+    }
+  }
+}
+
+.card-content {
+  padding: 0;
+}
+
+.table-container {
+  overflow-x: auto;
+}

@@ -1,0 +1,119 @@
+<div class="page-container">
+  <!-- Pending Approvals Section -->
+  <mat-card class="pending-card" *ngIf="pendingVisitors.length > 0">
+    <div class="card-header pending-header">
+      <h2>
+        <mat-icon>pending_actions</mat-icon>
+        Pending Approvals
+        <span class="badge">{{ pendingVisitors.length }}</span>
+      </h2>
+    </div>
+
+    <div class="pending-list">
+      <div class="visitor-card" *ngFor="let visitor of pendingVisitors">
+        <div class="visitor-info">
+          <div class="visitor-avatar">
+            <mat-icon>person</mat-icon>
+          </div>
+          <div class="visitor-details">
+            <h3>{{ visitor.name }}</h3>
+            <p class="purpose" *ngIf="visitor.purpose_or_description">
+              {{ visitor.purpose_or_description }}
+            </p>
+            <div class="meta">
+              <span *ngIf="visitor.vehicle_details">
+                <mat-icon>directions_car</mat-icon>
+                {{ visitor.vehicle_details }}
+              </span>
+              <span>
+                <mat-icon>schedule</mat-icon>
+                {{ formatDate(visitor.created_at) }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="visitor-actions">
+          <app-status-badge [status]="visitor.status"></app-status-badge>
+          <div class="action-buttons" *ngIf="visitor.status === 'NEW'">
+            <button mat-raised-button color="primary" (click)="approveVisitor(visitor)">
+              <mat-icon>check</mat-icon>
+              Approve
+            </button>
+            <button mat-raised-button color="warn" (click)="rejectVisitor(visitor)">
+              <mat-icon>close</mat-icon>
+              Reject
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+
+  <!-- All Visitors History -->
+  <mat-card>
+    <div class="card-header">
+      <h2>
+        <mat-icon>history</mat-icon>
+        Visitor History
+      </h2>
+    </div>
+
+    <div class="card-content">
+      <app-loading-spinner *ngIf="isLoading" message="Loading visitors..."></app-loading-spinner>
+
+      <ng-container *ngIf="!isLoading">
+        <app-empty-state
+          *ngIf="allVisitors.length === 0"
+          icon="people_outline"
+          title="No Visitors Yet"
+          message="Your visitor history will appear here.">
+        </app-empty-state>
+
+        <div class="table-container" *ngIf="allVisitors.length > 0">
+          <table mat-table [dataSource]="allVisitors">
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Visitor</th>
+              <td mat-cell *matCellDef="let visitor">{{ visitor.name }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="purpose">
+              <th mat-header-cell *matHeaderCellDef>Purpose</th>
+              <td mat-cell *matCellDef="let visitor">
+                {{ visitor.purpose_or_description || '-' }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="vehicle">
+              <th mat-header-cell *matHeaderCellDef>Vehicle</th>
+              <td mat-cell *matCellDef="let visitor">
+                {{ visitor.vehicle_details || '-' }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let visitor">
+                <app-status-badge [status]="visitor.status"></app-status-badge>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="logged_by">
+              <th mat-header-cell *matHeaderCellDef>Logged By</th>
+              <td mat-cell *matCellDef="let visitor">{{ visitor.guard_name }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="created_at">
+              <th mat-header-cell *matHeaderCellDef>Date</th>
+              <td mat-cell *matCellDef="let visitor">
+                {{ formatDate(visitor.created_at) }}
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="['name', 'purpose', 'vehicle', 'status', 'logged_by', 'created_at']"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['name', 'purpose', 'vehicle', 'status', 'logged_by', 'created_at'];"></tr>
+          </table>
+        </div>
+      </ng-container>
+    </div>
+  </mat-card>
+</div>

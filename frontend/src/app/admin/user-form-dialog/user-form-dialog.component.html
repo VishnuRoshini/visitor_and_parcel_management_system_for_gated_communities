@@ -1,0 +1,62 @@
+<h2 mat-dialog-title>{{ dialogTitle }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <mat-dialog-content>
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" placeholder="Enter full name">
+      <mat-icon matPrefix>person</mat-icon>
+      <mat-error *ngIf="form.get('name')?.hasError('required')">Name is required</mat-error>
+      <mat-error *ngIf="form.get('name')?.hasError('minlength')">Name must be at least 2 characters</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email" placeholder="Enter email address">
+      <mat-icon matPrefix>email</mat-icon>
+      <mat-hint>This will be used for login</mat-hint>
+      <mat-error *ngIf="form.get('email')?.hasError('required')">Email is required</mat-error>
+      <mat-error *ngIf="form.get('email')?.hasError('email')">Please enter a valid email</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" *ngIf="!isEditMode">
+      <mat-label>Password</mat-label>
+      <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'" placeholder="Enter password">
+      <mat-icon matPrefix>lock</mat-icon>
+      <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+        <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+      <mat-hint>Initial password for login</mat-hint>
+      <mat-error *ngIf="form.get('password')?.hasError('required')">Password is required</mat-error>
+      <mat-error *ngIf="form.get('password')?.hasError('minlength')">Password must be at least 6 characters</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" *ngIf="showRoleSelector">
+      <mat-label>Role</mat-label>
+      <mat-select formControlName="role" [disabled]="isEditMode">
+        <mat-option *ngFor="let role of roles" [value]="role">{{ role }}</mat-option>
+      </mat-select>
+      <mat-icon matPrefix>badge</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Contact Number</mat-label>
+      <input matInput formControlName="contact_info" placeholder="Enter phone number">
+      <mat-icon matPrefix>phone</mat-icon>
+    </mat-form-field>
+
+    <!-- Info message for new users -->
+    <div class="info-message" *ngIf="!isEditMode">
+      <mat-icon>info</mat-icon>
+      <span>After creation, this user can login immediately with the provided email and password.</span>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="onCancel()" [disabled]="isLoading">Cancel</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="isLoading">
+      <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
+      <span *ngIf="!isLoading">{{ isEditMode ? 'Update' : 'Create' }}</span>
+    </button>
+  </mat-dialog-actions>
+</form>

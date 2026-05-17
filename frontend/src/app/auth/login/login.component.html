@@ -1,0 +1,74 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <mat-icon class="logo-icon">apartment</mat-icon>
+      <h1>Visitor & Parcel</h1>
+      <p>Gated Community Management System</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" type="email" placeholder="Enter your email">
+        <mat-icon matPrefix>email</mat-icon>
+        <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
+          Email is required
+        </mat-error>
+        <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
+          Please enter a valid email
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'" placeholder="Enter your password">
+        <mat-icon matPrefix>lock</mat-icon>
+        <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+          <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+          Password is required
+        </mat-error>
+        <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')">
+          Password must be at least 6 characters
+        </mat-error>
+      </mat-form-field>
+
+      <button 
+        mat-raised-button 
+        color="primary" 
+        type="submit" 
+        class="login-button"
+        [disabled]="isLoading">
+        <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
+        <span *ngIf="!isLoading">Sign In</span>
+      </button>
+    </form>
+
+    <div class="demo-credentials">
+      <mat-divider></mat-divider>
+      <p class="demo-title">Demo Credentials</p>
+      <div class="credentials-list">
+        <div class="credential">
+          <mat-icon>admin_panel_settings</mat-icon>
+          <span class="role">Admin:</span>
+          <span class="email">admin&#64;vpm.com</span>
+        </div>
+        <div class="credential">
+          <mat-icon>security</mat-icon>
+          <span class="role">Security:</span>
+          <span class="email">guard1&#64;vpm.com</span>
+        </div>
+        <div class="credential">
+          <mat-icon>home</mat-icon>
+          <span class="role">Resident:</span>
+          <span class="email">srinivas&#64;vpm.com</span>
+        </div>
+        <div class="credential-note">
+          <mat-icon>info</mat-icon>
+          <span>Default password: password123</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

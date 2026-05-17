@@ -1,0 +1,177 @@
+<div class="admin-query-container">
+
+  <!-- Stats Bar -->
+  <div class="stats-row">
+    <mat-card class="stat-card total">
+      <mat-icon>list_alt</mat-icon>
+      <div>
+        <span class="stat-number">{{ stats.total }}</span>
+        <span class="stat-label">Total Queries</span>
+      </div>
+    </mat-card>
+    <mat-card class="stat-card pending">
+      <mat-icon>pending</mat-icon>
+      <div>
+        <span class="stat-number">{{ stats.pending }}</span>
+        <span class="stat-label">Pending</span>
+      </div>
+    </mat-card>
+    <mat-card class="stat-card resolved">
+      <mat-icon>check_circle</mat-icon>
+      <div>
+        <span class="stat-number">{{ stats.resolved }}</span>
+        <span class="stat-label">Resolved</span>
+      </div>
+    </mat-card>
+    <mat-card class="stat-card high">
+      <mat-icon>priority_high</mat-icon>
+      <div>
+        <span class="stat-number">{{ stats.high_priority }}</span>
+        <span class="stat-label">High Priority</span>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- Filters -->
+  <mat-card class="filter-card">
+    <mat-card-content>
+      <div class="filters-row">
+        <!-- Search -->
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Search queries</mat-label>
+          <input matInput [formControl]="searchControl" placeholder="Resident, title, apartment..." />
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <!-- Status Filter -->
+        <mat-form-field appearance="outline">
+          <mat-label>Status</mat-label>
+          <mat-select [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()">
+            <mat-option value="">All</mat-option>
+            <mat-option *ngFor="let s of statuses" [value]="s">{{ s | titlecase }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Priority Filter -->
+        <mat-form-field appearance="outline">
+          <mat-label>Priority</mat-label>
+          <mat-select [(ngModel)]="priorityFilter" (ngModelChange)="applyFilters()">
+            <mat-option value="">All</mat-option>
+            <mat-option *ngFor="let p of priorities" [value]="p">{{ p | titlecase }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-stroked-button (click)="clearFilters()">
+          <mat-icon>clear</mat-icon> Clear
+        </button>
+        <button mat-icon-button (click)="loadAll(); loadStats()" matTooltip="Refresh">
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Table Card -->
+  <mat-card>
+    <mat-card-content>
+      <div *ngIf="isLoading" class="loading">
+        <mat-spinner diameter="36"></mat-spinner>
+      </div>
+
+      <div *ngIf="!isLoading" class="table-wrapper">
+        <table mat-table [dataSource]="dataSource" matSort class="queries-table">
+
+          <!-- Resident -->
+          <ng-container matColumnDef="resident_name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Resident</th>
+            <td mat-cell *matCellDef="let q">
+              <div class="resident-cell">
+                <mat-icon>person</mat-icon>
+                <span>{{ q.resident_name }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Title -->
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
+            <td mat-cell *matCellDef="let q" class="title-cell">{{ q.title }}</td>
+          </ng-container>
+
+          <!-- Category -->
+          <ng-container matColumnDef="category">
+            <th mat-header-cell *matHeaderCellDef>Category</th>
+            <td mat-cell *matCellDef="let q">{{ q.category }}</td>
+          </ng-container>
+
+          <!-- Apartment -->
+          <ng-container matColumnDef="apartment_number">
+            <th mat-header-cell *matHeaderCellDef>Apt.</th>
+            <td mat-cell *matCellDef="let q">{{ q.apartment_number }}</td>
+          </ng-container>
+
+          <!-- Priority -->
+          <ng-container matColumnDef="priority">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Priority</th>
+            <td mat-cell *matCellDef="let q">
+              <span class="chip" [style.background-color]="getPriorityColor(q.priority)">{{ q.priority }}</span>
+            </td>
+          </ng-container>
+
+          <!-- Status -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+            <td mat-cell *matCellDef="let q">
+              <span class="chip" [style.background-color]="getStatusColor(q.status)">{{ q.status }}</span>
+            </td>
+          </ng-container>
+
+          <!-- Date -->
+          <ng-container matColumnDef="created_at">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+            <td mat-cell *matCellDef="let q">{{ formatDate(q.created_at) }}</td>
+          </ng-container>
+
+          <!-- Actions -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let q">
+              <button mat-icon-button color="primary" matTooltip="View Details" (click)="openDetails(q)">
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button mat-icon-button color="accent" matTooltip="Mark In Progress"
+                      *ngIf="q.status === 'PENDING'"
+                      (click)="quickUpdateStatus(q.id, 'IN_PROGRESS')">
+                <mat-icon>play_circle_outline</mat-icon>
+              </button>
+              <button mat-icon-button style="color:#2e7d32" matTooltip="Mark Resolved"
+                      *ngIf="q.status === 'IN_PROGRESS'"
+                      (click)="quickUpdateStatus(q.id, 'RESOLVED')">
+                <mat-icon>check_circle_outline</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" matTooltip="Delete" (click)="deleteQuery(q.id)">
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+              class="table-row" (click)="openDetails(row)"></tr>
+
+          <!-- No data -->
+          <tr class="mat-row no-data-row" *matNoDataRow>
+            <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+              <div class="no-data">
+                <mat-icon>inbox</mat-icon>
+                <span>No queries found</span>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons></mat-paginator>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

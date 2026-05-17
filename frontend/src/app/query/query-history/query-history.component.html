@@ -1,0 +1,88 @@
+<div class="query-history-container">
+  <mat-card class="header-card">
+    <mat-card-content>
+      <div class="header-content">
+        <mat-icon class="header-icon">history</mat-icon>
+        <div>
+          <h2>My Query History</h2>
+          <p>Track the status of all your submitted queries and complaints.</p>
+        </div>
+        <button mat-icon-button (click)="currentUser && loadQueries(currentUser.id)" matTooltip="Refresh">
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="loading-state">
+    <mat-spinner diameter="40"></mat-spinner>
+    <span>Loading your queries...</span>
+  </div>
+
+  <!-- Empty State -->
+  <mat-card *ngIf="!isLoading && queries.length === 0" class="empty-card">
+    <mat-card-content class="empty-state">
+      <mat-icon>inbox</mat-icon>
+      <h3>No queries submitted yet</h3>
+      <p>Use the "Submit Query" tab to report any apartment issues.</p>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Query Cards -->
+  <div *ngIf="!isLoading && queries.length > 0" class="queries-list">
+    <mat-card *ngFor="let query of queries" class="query-card">
+      <mat-card-header (click)="toggleExpand(query.id)" class="query-header clickable">
+        <div class="query-header-content">
+          <div class="query-title-row">
+            <span class="query-title">{{ query.title }}</span>
+            <div class="chips-row">
+              <span class="chip priority-chip" [style.background-color]="getPriorityColor(query.priority)">
+                {{ query.priority }}
+              </span>
+              <span class="chip status-chip" [style.background-color]="getStatusColor(query.status)">
+                {{ query.status | titlecase }}
+              </span>
+            </div>
+          </div>
+          <div class="query-meta">
+            <span><mat-icon inline>category</mat-icon> {{ query.category }}</span>
+            <span><mat-icon inline>home</mat-icon> {{ query.apartment_number }}</span>
+            <span><mat-icon inline>schedule</mat-icon> {{ formatDate(query.created_at) }}</span>
+          </div>
+        </div>
+        <mat-icon class="expand-icon">
+          {{ expandedQueryId === query.id ? 'expand_less' : 'expand_more' }}
+        </mat-icon>
+      </mat-card-header>
+
+      <!-- Expanded Details -->
+      <mat-card-content *ngIf="expandedQueryId === query.id" class="query-details">
+        <mat-divider></mat-divider>
+
+        <div class="detail-section">
+          <h4><mat-icon>description</mat-icon> Description</h4>
+          <p>{{ query.description }}</p>
+        </div>
+
+        <div *ngIf="query.image_url" class="detail-section">
+          <h4><mat-icon>photo</mat-icon> Attached Image</h4>
+          <img [src]="query.image_url" alt="Query Image" class="query-image" />
+        </div>
+
+        <div *ngIf="query.admin_remarks" class="detail-section admin-remark">
+          <h4><mat-icon>admin_panel_settings</mat-icon> Admin Remarks</h4>
+          <div class="remark-box">
+            <mat-icon>format_quote</mat-icon>
+            <p>{{ query.admin_remarks }}</p>
+          </div>
+        </div>
+
+        <div *ngIf="query.resolved_at" class="resolved-notice">
+          <mat-icon>check_circle</mat-icon>
+          <span>Resolved on {{ formatDate(query.resolved_at) }}</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

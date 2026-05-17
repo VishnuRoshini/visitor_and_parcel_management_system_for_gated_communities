@@ -1,0 +1,154 @@
+.two-factor-dialog {
+  min-width: 400px;
+
+  h2[mat-dialog-title] {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+    mat-icon {
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  mat-dialog-content {
+    padding: 24px 0;
+
+    .info-section {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      background: #e3f2fd;
+      border-radius: 8px;
+      margin-bottom: 20px;
+
+      mat-icon {
+        color: #1976d2;
+        flex-shrink: 0;
+      }
+
+      p {
+        margin: 0;
+        color: #1565c0;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+    }
+
+    .timer-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px;
+      background: #f5f5f5;
+      border-radius: 8px;
+      margin-bottom: 24px;
+
+      mat-icon {
+        color: #666;
+      }
+
+      span {
+        font-size: 14px;
+        color: #666;
+
+        strong {
+          font-size: 16px;
+          color: #333;
+        }
+      }
+
+      &.warning {
+        background: #fff3e0;
+
+        mat-icon, span {
+          color: #e65100;
+        }
+
+        strong {
+          color: #e65100;
+        }
+      }
+    }
+
+    .otp-field {
+      width: 100%;
+
+      input {
+        text-align: center;
+        font-size: 24px;
+        letter-spacing: 8px;
+        font-weight: 500;
+      }
+    }
+  }
+
+  mat-dialog-actions {
+    padding: 16px 0 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    margin-top: 0;
+
+    button {
+      min-width: 100px;
+
+      mat-spinner {
+        display: inline-block;
+        margin-right: 8px;
+      }
+    }
+  }
+}
+
+// Dark theme support
+:host-context(.dark-theme) {
+  .two-factor-dialog {
+    h2[mat-dialog-title] {
+      border-bottom-color: rgba(255, 255, 255, 0.12);
+    }
+
+    mat-dialog-content {
+      .info-section {
+        background: rgba(33, 150, 243, 0.15);
+
+        p {
+          color: #90caf9;
+        }
+
+        mat-icon {
+          color: #90caf9;
+        }
+      }
+
+      .timer-section {
+        background: rgba(255, 255, 255, 0.05);
+
+        mat-icon, span {
+          color: #bbb;
+        }
+
+        strong {
+          color: #fff;
+        }
+
+        &.warning {
+          background: rgba(255, 152, 0, 0.15);
+
+          mat-icon, span, strong {
+            color: #ffb74d;
+          }
+        }
+      }
+    }
+
+    mat-dialog-actions {
+      border-top-color: rgba(255, 255, 255, 0.12);
+    }
+  }
+}

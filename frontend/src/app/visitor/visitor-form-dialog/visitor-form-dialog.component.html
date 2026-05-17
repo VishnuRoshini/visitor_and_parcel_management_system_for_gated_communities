@@ -1,0 +1,66 @@
+<h2 mat-dialog-title>
+  <mat-icon>person_add</mat-icon>
+  Log New Visitor
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="visitorForm" class="visitor-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Resident</mat-label>
+      <mat-select formControlName="resident_id" placeholder="Select resident">
+        <mat-option *ngFor="let resident of residents" [value]="resident.id">
+          {{ resident.name }}
+        </mat-option>
+      </mat-select>
+      <mat-icon matPrefix>home</mat-icon>
+      <mat-error *ngIf="visitorForm.get('resident_id')?.invalid">
+        {{ getErrorMessage('resident_id') }}
+      </mat-error>
+      <mat-hint *ngIf="isLoadingResidents">Loading residents...</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Visitor Name</mat-label>
+      <input matInput formControlName="name" placeholder="Enter visitor's full name">
+      <mat-icon matPrefix>person</mat-icon>
+      <mat-error *ngIf="visitorForm.get('name')?.invalid">
+        {{ getErrorMessage('name') }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Purpose of Visit</mat-label>
+      <textarea 
+        matInput 
+        formControlName="purpose_or_description" 
+        placeholder="Enter purpose of visit (optional)"
+        rows="3">
+      </textarea>
+      <mat-icon matPrefix>description</mat-icon>
+      <mat-error *ngIf="visitorForm.get('purpose_or_description')?.invalid">
+        {{ getErrorMessage('purpose_or_description') }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Vehicle Details</mat-label>
+      <input matInput formControlName="vehicle_details" placeholder="Vehicle number (optional)">
+      <mat-icon matPrefix>directions_car</mat-icon>
+      <mat-error *ngIf="visitorForm.get('vehicle_details')?.invalid">
+        {{ getErrorMessage('vehicle_details') }}
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" [disabled]="isLoading">Cancel</button>
+  <button 
+    mat-raised-button 
+    color="primary" 
+    (click)="onSubmit()" 
+    [disabled]="isLoading || isLoadingResidents">
+    <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
+    <span *ngIf="!isLoading">Log Visitor</span>
+  </button>
+</mat-dialog-actions>

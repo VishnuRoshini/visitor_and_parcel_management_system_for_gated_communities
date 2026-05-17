@@ -1,0 +1,103 @@
+<div class="dialog-wrapper">
+  <!-- Header -->
+  <div class="dialog-header">
+    <div class="header-left">
+      <mat-icon>report_problem</mat-icon>
+      <h2 mat-dialog-title>Query Details</h2>
+    </div>
+    <button mat-icon-button (click)="close()"><mat-icon>close</mat-icon></button>
+  </div>
+
+  <mat-dialog-content>
+    <!-- Info chips -->
+    <div class="chips-row">
+      <span class="chip" [style.background-color]="getPriorityColor(query.priority)">
+        {{ query.priority }} Priority
+      </span>
+      <span class="chip" [style.background-color]="getStatusColor(query.status)">
+        {{ query.status }}
+      </span>
+    </div>
+
+    <!-- Resident info -->
+    <div class="info-grid">
+      <div class="info-item">
+        <label>Resident</label>
+        <span>{{ query.resident_name }}</span>
+      </div>
+      <div class="info-item">
+        <label>Email</label>
+        <span>{{ query.resident_email }}</span>
+      </div>
+      <div class="info-item">
+        <label>Apartment</label>
+        <span>{{ query.apartment_number }}</span>
+      </div>
+      <div class="info-item">
+        <label>Category</label>
+        <span>{{ query.category }}</span>
+      </div>
+      <div class="info-item">
+        <label>Submitted</label>
+        <span>{{ formatDate(query.created_at) }}</span>
+      </div>
+      <div class="info-item" *ngIf="query.resolved_at">
+        <label>Resolved</label>
+        <span>{{ formatDate(query.resolved_at) }}</span>
+      </div>
+    </div>
+
+    <!-- Title & Description -->
+    <div class="section">
+      <h3>{{ query.title }}</h3>
+      <p class="description">{{ query.description }}</p>
+    </div>
+
+    <!-- Image -->
+    <div *ngIf="query.image_url" class="section">
+      <label class="section-label"><mat-icon>photo</mat-icon> Attached Image</label>
+      <img [src]="query.image_url" alt="Query attachment" class="query-img" />
+    </div>
+
+    <!-- Existing Remarks -->
+    <div *ngIf="query.admin_remarks" class="section remark-display">
+      <label class="section-label"><mat-icon>admin_panel_settings</mat-icon> Admin Remarks</label>
+      <div class="remark-box">{{ query.admin_remarks }}</div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- Admin Actions -->
+    <div class="admin-actions">
+      <h4>Admin Actions</h4>
+
+      <!-- Update Status -->
+      <div class="action-row">
+        <mat-form-field appearance="outline" class="status-select">
+          <mat-label>Update Status</mat-label>
+          <mat-select [(ngModel)]="selectedStatus">
+            <mat-option *ngFor="let s of statuses" [value]="s">{{ s | titlecase }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button mat-raised-button color="primary"
+                [disabled]="isSavingStatus"
+                (click)="updateStatus()">
+          {{ isSavingStatus ? 'Saving...' : 'Update Status' }}
+        </button>
+      </div>
+
+      <!-- Add Remark -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Add / Update Remark</mat-label>
+        <textarea matInput [formControl]="remarkControl" rows="3"
+                  placeholder="Write a note for the resident..."></textarea>
+      </mat-form-field>
+      <button mat-raised-button color="accent"
+              [disabled]="isSavingRemark || remarkControl.invalid || !remarkControl.value?.trim()"
+              (click)="saveRemark()">
+        <mat-icon>send</mat-icon>
+        {{ isSavingRemark ? 'Sending...' : 'Send Remark to Resident' }}
+      </button>
+    </div>
+  </mat-dialog-content>
+</div>

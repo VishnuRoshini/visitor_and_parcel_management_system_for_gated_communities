@@ -1,0 +1,42 @@
+h2[mat-dialog-title] {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  padding: 24px 24px 16px;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+
+  mat-icon {
+    color: var(--accent-color);
+  }
+}
+
+mat-dialog-content {
+  padding: 0 24px;
+}
+
+.visitor-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 400px;
+}
+
+mat-dialog-actions {
+  padding: 16px 24px 24px;
+
+  button {
+    min-width: 100px;
+
+    mat-spinner {
+      display: inline-block;
+      margin-right: 8px;
+
+      ::ng-deep circle {
+        stroke: white;
+      }
+    }
+  }
+}

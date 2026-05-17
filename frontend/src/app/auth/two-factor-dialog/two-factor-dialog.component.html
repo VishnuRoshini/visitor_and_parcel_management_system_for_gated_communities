@@ -1,0 +1,53 @@
+<div class="two-factor-dialog">
+  <h2 mat-dialog-title>
+    <mat-icon color="primary">security</mat-icon>
+    Two-Factor Authentication
+  </h2>
+
+  <mat-dialog-content>
+    <div class="info-section">
+      <mat-icon>smartphone</mat-icon>
+      <p>Enter the 6-digit verification code from your authenticator app.</p>
+    </div>
+
+    <div class="timer-section" [class.warning]="remainingTime < 60">
+      <mat-icon>timer</mat-icon>
+      <span>Code expires in: <strong>{{ formattedTime }}</strong></span>
+    </div>
+
+    <form [formGroup]="otpForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline" class="otp-field">
+        <mat-label>Verification Code</mat-label>
+        <input matInput formControlName="otp" 
+               maxlength="6" 
+               placeholder="000000"
+               autocomplete="one-time-code"
+               inputmode="numeric"
+               (keyup.enter)="onSubmit()">
+        <mat-icon matPrefix>dialpad</mat-icon>
+        <mat-error *ngIf="otpForm.get('otp')?.hasError('required')">
+          Verification code is required
+        </mat-error>
+        <mat-error *ngIf="otpForm.get('otp')?.hasError('minlength') || otpForm.get('otp')?.hasError('maxlength')">
+          Code must be 6 digits
+        </mat-error>
+        <mat-error *ngIf="otpForm.get('otp')?.hasError('pattern')">
+          Only numbers are allowed
+        </mat-error>
+        <mat-hint>Enter the code from your authenticator app</mat-hint>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()" [disabled]="isLoading">
+      Cancel
+    </button>
+    <button mat-raised-button color="primary" 
+            (click)="onSubmit()" 
+            [disabled]="isLoading || otpForm.invalid">
+      <mat-spinner *ngIf="isLoading" diameter="18"></mat-spinner>
+      <span *ngIf="!isLoading">Verify</span>
+    </button>
+  </mat-dialog-actions>
+</div>

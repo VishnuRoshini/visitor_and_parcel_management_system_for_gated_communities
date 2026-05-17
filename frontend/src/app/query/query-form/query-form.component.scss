@@ -1,0 +1,123 @@
+.query-form-container {
+  padding: 24px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.header-card {
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
+  color: white;
+
+  .header-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .header-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    opacity: 0.9;
+  }
+
+  h2 { margin: 0 0 4px; font-size: 1.4rem; }
+  p  { margin: 0; opacity: 0.85; }
+}
+
+.form-card {
+  mat-card-header {
+    margin-bottom: 16px;
+    mat-card-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.1rem;
+    }
+  }
+}
+
+.query-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.full-width { width: 100%; }
+
+.row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  @media (max-width: 600px) { grid-template-columns: 1fr; }
+}
+
+.priority-option {
+  &.low    { color: #2e7d32; }
+  &.medium { color: #e65100; }
+  &.high   { color: #c62828; font-weight: 600; }
+}
+
+/* Image upload */
+.image-upload-section {
+  .upload-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    color: rgba(0,0,0,.6);
+    margin-bottom: 8px;
+    cursor: default;
+  }
+
+  .upload-area {
+    border: 2px dashed rgba(0,0,0,.2);
+    border-radius: 8px;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: border-color .2s;
+    position: relative;
+    overflow: hidden;
+
+    &:hover { border-color: #1976d2; }
+  }
+
+  .upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: rgba(0,0,0,.4);
+    mat-icon { font-size: 36px; width: 36px; height: 36px; }
+    .hint { font-size: 0.75rem; }
+  }
+
+  .image-preview-wrapper {
+    position: relative;
+    width: 100%;
+    .image-preview {
+      width: 100%;
+      max-height: 200px;
+      object-fit: contain;
+    }
+    .remove-image-btn {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: rgba(0,0,0,.6);
+      color: white;
+    }
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding-top: 8px;
+}

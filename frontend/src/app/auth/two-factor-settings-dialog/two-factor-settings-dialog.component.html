@@ -1,0 +1,189 @@
+<div class="two-factor-settings-dialog">
+  <h2 mat-dialog-title>
+    <mat-icon color="primary">security</mat-icon>
+    Two-Factor Authentication
+  </h2>
+
+  <mat-dialog-content>
+    <!-- Loading State -->
+    <div *ngIf="state === 'loading'" class="loading-state">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading 2FA settings...</p>
+    </div>
+
+    <!-- Status State -->
+    <div *ngIf="state === 'status'" class="status-state">
+      <div class="status-card" [class.enabled]="isEnabled" [class.disabled]="!isEnabled">
+        <div class="status-icon">
+          <mat-icon>{{ isEnabled ? 'verified_user' : 'shield' }}</mat-icon>
+        </div>
+        <div class="status-info">
+          <h3>{{ isEnabled ? 'Enabled' : 'Not Enabled' }}</h3>
+          <p *ngIf="isEnabled && enabledAt">Enabled since {{ enabledAt | date:'medium' }}</p>
+          <p *ngIf="!isEnabled">Add an extra layer of security to your account</p>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <mat-icon>info</mat-icon>
+        <p>
+          Two-Factor Authentication adds an extra layer of security by requiring a verification code 
+          from your authenticator app when you log in.
+        </p>
+      </div>
+
+      <div class="action-buttons">
+        <button mat-raised-button color="primary" *ngIf="!isEnabled" 
+                (click)="startSetup()" [disabled]="isProcessing">
+          <mat-spinner *ngIf="isProcessing" diameter="18"></mat-spinner>
+          <mat-icon *ngIf="!isProcessing">add_moderator</mat-icon>
+          <span>Enable 2FA</span>
+        </button>
+        
+        <button mat-raised-button color="warn" *ngIf="isEnabled" 
+                (click)="showDisableForm()" [disabled]="isProcessing">
+          <mat-icon>remove_moderator</mat-icon>
+          <span>Disable 2FA</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Setup State - Show QR Code -->
+    <div *ngIf="state === 'setup'" class="setup-state">
+      <div class="step-indicator">
+        <span class="step active">1. Scan QR Code</span>
+        <mat-icon>chevron_right</mat-icon>
+        <span class="step">2. Verify</span>
+      </div>
+
+      <div class="qr-section">
+        <p class="instruction">Scan this QR code with your authenticator app:</p>
+        <div class="qr-code">
+          <img [src]="setupData?.qrCode" alt="2FA QR Code" *ngIf="setupData?.qrCode">
+        </div>
+        
+        <div class="manual-entry">
+          <p>Or manually enter this key:</p>
+          <div class="secret-key">
+            <code>{{ setupData?.secret }}</code>
+            <button mat-icon-button matTooltip="Copy to clipboard" 
+                    (click)="copyToClipboard(setupData?.secret)">
+              <mat-icon>content_copy</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="apps-info">
+        <p>Recommended authenticator apps:</p>
+        <div class="apps-list">
+          <span><mat-icon>smartphone</mat-icon> Google Authenticator</span>
+          <span><mat-icon>smartphone</mat-icon> Microsoft Authenticator</span>
+          <span><mat-icon>smartphone</mat-icon> Authy</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Enable State - Verify Code -->
+    <div *ngIf="state === 'enable'" class="enable-state">
+      <div class="step-indicator">
+        <span class="step completed">1. Scan QR Code</span>
+        <mat-icon>chevron_right</mat-icon>
+        <span class="step active">2. Verify</span>
+      </div>
+
+      <p class="instruction">Enter the 6-digit code from your authenticator app:</p>
+      
+      <form [formGroup]="verifyForm" (ngSubmit)="enable2FA()">
+        <mat-form-field appearance="outline" class="otp-field">
+          <mat-label>Verification Code</mat-label>
+          <input matInput formControlName="otp" 
+                 maxlength="6" 
+                 placeholder="000000"
+                 autocomplete="one-time-code"
+                 inputmode="numeric">
+          <mat-icon matPrefix>dialpad</mat-icon>
+          <mat-error *ngIf="verifyForm.get('otp')?.hasError('required')">
+            Code is required
+          </mat-error>
+          <mat-error *ngIf="verifyForm.get('otp')?.hasError('minlength') || verifyForm.get('otp')?.hasError('maxlength')">
+            Code must be 6 digits
+          </mat-error>
+          <mat-error *ngIf="verifyForm.get('otp')?.hasError('pattern')">
+            Only numbers are allowed
+          </mat-error>
+        </mat-form-field>
+      </form>
+    </div>
+
+    <!-- Disable State - Enter Verification Code -->
+    <div *ngIf="state === 'disable'" class="disable-state">
+      <div class="warning-box">
+        <mat-icon>warning</mat-icon>
+        <div>
+          <h4>Disable Two-Factor Authentication?</h4>
+          <p>This will make your account less secure. Enter the verification code from your authenticator app to confirm.</p>
+        </div>
+      </div>
+
+      <form [formGroup]="disableForm" (ngSubmit)="disable2FA()">
+        <mat-form-field appearance="outline" class="otp-field">
+          <mat-label>Verification Code</mat-label>
+          <input matInput formControlName="code" 
+                 maxlength="6"
+                 placeholder="000000"
+                 autocomplete="one-time-code"
+                 inputmode="numeric">
+          <mat-icon matPrefix>dialpad</mat-icon>
+          <mat-error *ngIf="disableForm.get('code')?.hasError('required')">
+            Verification code is required
+          </mat-error>
+          <mat-error *ngIf="disableForm.get('code')?.hasError('minlength') || disableForm.get('code')?.hasError('maxlength')">
+            Code must be 6 digits
+          </mat-error>
+          <mat-error *ngIf="disableForm.get('code')?.hasError('pattern')">
+            Only numbers are allowed
+          </mat-error>
+        </mat-form-field>
+      </form>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <!-- Status Actions -->
+    <ng-container *ngIf="state === 'status'">
+      <button mat-button (click)="close()">Close</button>
+    </ng-container>
+
+    <!-- Setup Actions -->
+    <ng-container *ngIf="state === 'setup'">
+      <button mat-button (click)="goBack()">Cancel</button>
+      <button mat-raised-button color="primary" (click)="proceedToEnable()">
+        <span>Next</span>
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </ng-container>
+
+    <!-- Enable Actions -->
+    <ng-container *ngIf="state === 'enable'">
+      <button mat-button (click)="state = 'setup'">Back</button>
+      <button mat-raised-button color="primary" 
+              (click)="enable2FA()" 
+              [disabled]="isProcessing || verifyForm.invalid">
+        <mat-spinner *ngIf="isProcessing" diameter="18"></mat-spinner>
+        <span *ngIf="!isProcessing">Enable 2FA</span>
+      </button>
+    </ng-container>
+
+    <!-- Disable Actions -->
+    <ng-container *ngIf="state === 'disable'">
+      <button mat-button (click)="goBack()">Cancel</button>
+      <button mat-raised-button color="warn" 
+              (click)="disable2FA()" 
+              [disabled]="isProcessing || disableForm.invalid">
+        <mat-spinner *ngIf="isProcessing" diameter="18"></mat-spinner>
+        <span *ngIf="!isProcessing">Disable 2FA</span>
+      </button>
+    </ng-container>
+  </mat-dialog-actions>
+</div>

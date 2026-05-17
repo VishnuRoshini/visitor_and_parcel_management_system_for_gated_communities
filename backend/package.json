@@ -1,0 +1,50 @@
+{
+  "name": "visitor-parcel-backend",
+  "version": "1.0.0",
+  "description": "Backend API for Visitor & Parcel Management System",
+  "main": "dist/app.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
+    "lint": "eslint src/**/*.ts",
+    "test": "jest"
+  },
+  "keywords": [
+    "visitor",
+    "parcel",
+    "management",
+    "gated-community"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^8.2.1",
+    "express-validator": "^7.0.1",
+    "jsonwebtoken": "^9.0.3",
+    "mysql2": "^3.6.5",
+    "nodemailer": "^7.0.11",
+    "qrcode": "^1.5.4",
+    "socket.io": "^4.7.2",
+    "speakeasy": "^2.0.0",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^20.19.41",
+    "@types/nodemailer": "^7.0.4",
+    "@types/qrcode": "^1.5.6",
+    "@types/speakeasy": "^2.0.10",
+    "@types/uuid": "^9.0.7",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.9.3"
+  }
+}

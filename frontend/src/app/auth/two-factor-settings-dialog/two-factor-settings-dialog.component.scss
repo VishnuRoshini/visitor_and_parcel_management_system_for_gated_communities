@@ -1,0 +1,414 @@
+.two-factor-settings-dialog {
+  min-width: 450px;
+  max-width: 500px;
+
+  h2[mat-dialog-title] {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+    mat-icon {
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  mat-dialog-content {
+    padding: 24px 0;
+    min-height: 200px;
+
+    // Loading State
+    .loading-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      gap: 16px;
+
+      p {
+        color: #666;
+        margin: 0;
+      }
+    }
+
+    // Status State
+    .status-state {
+      .status-card {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+
+        &.enabled {
+          background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+          
+          .status-icon mat-icon {
+            color: #2e7d32;
+          }
+
+          h3 {
+            color: #2e7d32;
+          }
+        }
+
+        &.disabled {
+          background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+          
+          .status-icon mat-icon {
+            color: #ef6c00;
+          }
+
+          h3 {
+            color: #ef6c00;
+          }
+        }
+
+        .status-icon mat-icon {
+          font-size: 48px;
+          width: 48px;
+          height: 48px;
+        }
+
+        .status-info {
+          h3 {
+            margin: 0 0 4px;
+            font-size: 18px;
+          }
+
+          p {
+            margin: 0;
+            color: #666;
+            font-size: 13px;
+          }
+        }
+      }
+
+      .info-box {
+        display: flex;
+        gap: 12px;
+        padding: 16px;
+        background: #e3f2fd;
+        border-radius: 8px;
+        margin-bottom: 20px;
+
+        mat-icon {
+          color: #1976d2;
+          flex-shrink: 0;
+        }
+
+        p {
+          margin: 0;
+          font-size: 13px;
+          color: #1565c0;
+          line-height: 1.5;
+        }
+      }
+
+      .action-buttons {
+        display: flex;
+        justify-content: center;
+        
+        button {
+          mat-spinner {
+            margin-right: 8px;
+          }
+        }
+      }
+    }
+
+    // Setup State
+    .setup-state {
+      .step-indicator {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 24px;
+        
+        .step {
+          padding: 6px 12px;
+          border-radius: 16px;
+          font-size: 13px;
+          background: #f5f5f5;
+          color: #999;
+
+          &.active {
+            background: #1976d2;
+            color: white;
+          }
+
+          &.completed {
+            background: #4caf50;
+            color: white;
+          }
+        }
+
+        mat-icon {
+          color: #ccc;
+          font-size: 18px;
+        }
+      }
+
+      .qr-section {
+        text-align: center;
+        margin-bottom: 20px;
+
+        .instruction {
+          margin-bottom: 16px;
+          color: #666;
+        }
+
+        .qr-code {
+          display: inline-block;
+          padding: 16px;
+          background: white;
+          border-radius: 12px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          margin-bottom: 16px;
+
+          img {
+            display: block;
+            width: 200px;
+            height: 200px;
+          }
+        }
+
+        .manual-entry {
+          p {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+          }
+
+          .secret-key {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #f5f5f5;
+            border-radius: 8px;
+
+            code {
+              font-family: monospace;
+              font-size: 14px;
+              letter-spacing: 2px;
+              color: #333;
+            }
+          }
+        }
+      }
+
+      .apps-info {
+        text-align: center;
+        padding: 16px;
+        background: #fafafa;
+        border-radius: 8px;
+
+        p {
+          font-size: 12px;
+          color: #666;
+          margin-bottom: 8px;
+        }
+
+        .apps-list {
+          display: flex;
+          justify-content: center;
+          flex-wrap: wrap;
+          gap: 12px;
+
+          span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: #666;
+
+            mat-icon {
+              font-size: 16px;
+              width: 16px;
+              height: 16px;
+            }
+          }
+        }
+      }
+    }
+
+    // Enable State
+    .enable-state {
+      .step-indicator {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 24px;
+        
+        .step {
+          padding: 6px 12px;
+          border-radius: 16px;
+          font-size: 13px;
+          background: #f5f5f5;
+          color: #999;
+
+          &.active {
+            background: #1976d2;
+            color: white;
+          }
+
+          &.completed {
+            background: #4caf50;
+            color: white;
+          }
+        }
+
+        mat-icon {
+          color: #ccc;
+          font-size: 18px;
+        }
+      }
+
+      .instruction {
+        text-align: center;
+        color: #666;
+        margin-bottom: 20px;
+      }
+
+      .otp-field {
+        width: 100%;
+
+        input {
+          text-align: center;
+          font-size: 24px;
+          letter-spacing: 8px;
+          font-weight: 500;
+        }
+      }
+    }
+
+    // Disable State
+    .disable-state {
+      .warning-box {
+        display: flex;
+        gap: 12px;
+        padding: 16px;
+        background: #fff3e0;
+        border-radius: 8px;
+        border-left: 4px solid #ff9800;
+        margin-bottom: 20px;
+
+        mat-icon {
+          color: #ff9800;
+          flex-shrink: 0;
+        }
+
+        h4 {
+          margin: 0 0 4px;
+          color: #e65100;
+        }
+
+        p {
+          margin: 0;
+          font-size: 13px;
+          color: #666;
+        }
+      }
+
+      mat-form-field {
+        width: 100%;
+      }
+    }
+  }
+
+  mat-dialog-actions {
+    padding: 16px 0 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    margin-top: 0;
+
+    button {
+      mat-spinner {
+        display: inline-block;
+        margin-right: 8px;
+      }
+    }
+  }
+}
+
+// Dark theme support
+:host-context(.dark-theme) {
+  .two-factor-settings-dialog {
+    h2[mat-dialog-title] {
+      border-bottom-color: rgba(255, 255, 255, 0.12);
+    }
+
+    mat-dialog-content {
+      .status-state {
+        .status-card {
+          &.enabled {
+            background: linear-gradient(135deg, rgba(46, 125, 50, 0.2) 0%, rgba(76, 175, 80, 0.2) 100%);
+          }
+
+          &.disabled {
+            background: linear-gradient(135deg, rgba(239, 108, 0, 0.2) 0%, rgba(255, 152, 0, 0.2) 100%);
+          }
+
+          .status-info p {
+            color: #bbb;
+          }
+        }
+
+        .info-box {
+          background: rgba(33, 150, 243, 0.15);
+
+          p {
+            color: #90caf9;
+          }
+        }
+      }
+
+      .setup-state {
+        .step-indicator .step {
+          background: rgba(255, 255, 255, 0.1);
+          color: #999;
+        }
+
+        .qr-section {
+          .instruction {
+            color: #bbb;
+          }
+
+          .manual-entry {
+            p {
+              color: #bbb;
+            }
+
+            .secret-key {
+              background: rgba(255, 255, 255, 0.1);
+
+              code {
+                color: #fff;
+              }
+            }
+          }
+        }
+
+        .apps-info {
+          background: rgba(255, 255, 255, 0.05);
+
+          p, span {
+            color: #bbb;
+          }
+        }
+      }
+    }
+
+    mat-dialog-actions {
+      border-top-color: rgba(255, 255, 255, 0.12);
+    }
+  }
+}

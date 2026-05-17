@@ -1,0 +1,122 @@
+<div class="query-form-container">
+  <!-- Header Card -->
+  <mat-card class="header-card">
+    <mat-card-content>
+      <div class="header-content">
+        <mat-icon class="header-icon">report_problem</mat-icon>
+        <div>
+          <h2>Submit a Query / Complaint</h2>
+          <p>Report any apartment-related issues and track their resolution status.</p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Form Card -->
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>edit_note</mat-icon>
+        New Query
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="queryForm" (ngSubmit)="submitQuery()" class="query-form">
+
+        <!-- Title -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Query Title</mat-label>
+          <input matInput formControlName="title" placeholder="e.g. Water leakage in bathroom" />
+          <mat-icon matSuffix>title</mat-icon>
+          <mat-error *ngIf="queryForm.get('title')?.hasError('required')">Title is required</mat-error>
+          <mat-error *ngIf="queryForm.get('title')?.hasError('minlength')">At least 5 characters</mat-error>
+        </mat-form-field>
+
+        <!-- Category & Priority Row -->
+        <div class="row-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="category">
+              <mat-option *ngFor="let cat of categories" [value]="cat">{{ cat }}</mat-option>
+            </mat-select>
+            <mat-icon matSuffix>category</mat-icon>
+            <mat-error *ngIf="queryForm.get('category')?.hasError('required')">Category is required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Priority</mat-label>
+            <mat-select formControlName="priority">
+              <mat-option value="LOW">
+                <span class="priority-option low">● Low</span>
+              </mat-option>
+              <mat-option value="MEDIUM">
+                <span class="priority-option medium">● Medium</span>
+              </mat-option>
+              <mat-option value="HIGH">
+                <span class="priority-option high">● High (Urgent)</span>
+              </mat-option>
+            </mat-select>
+            <mat-icon matSuffix>flag</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <!-- Apartment Number -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Apartment / Room Number</mat-label>
+          <input matInput formControlName="apartment_number" placeholder="e.g. A-204" />
+          <mat-icon matSuffix>home</mat-icon>
+          <mat-error *ngIf="queryForm.get('apartment_number')?.hasError('required')">Apartment number is required</mat-error>
+        </mat-form-field>
+
+        <!-- Description -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description"
+                    rows="5"
+                    placeholder="Describe the issue in detail..."></textarea>
+          <mat-icon matSuffix>description</mat-icon>
+          <mat-hint align="end">{{ queryForm.get('description')?.value?.length || 0 }}/1000</mat-hint>
+          <mat-error *ngIf="queryForm.get('description')?.hasError('required')">Description is required</mat-error>
+          <mat-error *ngIf="queryForm.get('description')?.hasError('minlength')">At least 10 characters</mat-error>
+        </mat-form-field>
+
+        <!-- Image Upload -->
+        <div class="image-upload-section">
+          <label class="upload-label">
+            <mat-icon>photo_camera</mat-icon>
+            Attach Image (Optional)
+          </label>
+          <div class="upload-area" (click)="fileInput.click()">
+            <div *ngIf="!imagePreview" class="upload-placeholder">
+              <mat-icon>cloud_upload</mat-icon>
+              <span>Click to upload an image</span>
+              <span class="hint">Supports JPG, PNG, GIF</span>
+            </div>
+            <div *ngIf="imagePreview" class="image-preview-wrapper">
+              <img [src]="imagePreview" alt="Preview" class="image-preview" />
+              <button mat-icon-button class="remove-image-btn" type="button" (click)="removeImage(); $event.stopPropagation()">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          </div>
+          <input #fileInput type="file" accept="image/*" style="display:none" (change)="onImageSelected($event)" />
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-actions">
+          <button mat-raised-button color="primary" type="submit"
+                  [disabled]="isSubmitting || queryForm.invalid">
+            <mat-icon>send</mat-icon>
+            {{ isSubmitting ? 'Submitting...' : 'Submit Query' }}
+          </button>
+          <button mat-stroked-button type="button" (click)="queryForm.reset({ priority: 'MEDIUM' }); imagePreview = null">
+            <mat-icon>refresh</mat-icon>
+            Reset
+          </button>
+        </div>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

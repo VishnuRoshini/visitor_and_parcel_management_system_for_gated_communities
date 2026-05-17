@@ -1,0 +1,183 @@
+<div class="page-container">
+  <app-loading-spinner *ngIf="isLoading" message="Loading dashboard..."></app-loading-spinner>
+
+  <ng-container *ngIf="!isLoading && stats">
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <button mat-raised-button color="primary" routerLink="/admin/residents">
+        <mat-icon>home</mat-icon>
+        Manage Residents
+      </button>
+      <button mat-raised-button color="accent" routerLink="/admin/guards">
+        <mat-icon>security</mat-icon>
+        Manage Guards
+      </button>
+      <button mat-raised-button routerLink="/visitor/log">
+        <mat-icon>people</mat-icon>
+        View Visitors
+      </button>
+      <button mat-raised-button routerLink="/parcel/log">
+        <mat-icon>inventory_2</mat-icon>
+        View Parcels
+      </button>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <mat-card class="stat-card visitors">
+        <mat-card-content>
+          <div class="stat-icon">
+            <mat-icon>people</mat-icon>
+          </div>
+          <div class="stat-info">
+            <h3>{{ stats.totalVisitorsToday }}</h3>
+            <p>Visitors Today</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card parcels">
+        <mat-card-content>
+          <div class="stat-icon">
+            <mat-icon>inventory_2</mat-icon>
+          </div>
+          <div class="stat-info">
+            <h3>{{ stats.totalParcelsToday }}</h3>
+            <p>Parcels Today</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card pending">
+        <mat-card-content>
+          <div class="stat-icon">
+            <mat-icon>pending_actions</mat-icon>
+          </div>
+          <div class="stat-info">
+            <h3>{{ stats.pendingApprovals }}</h3>
+            <p>Pending Approvals</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card parcels-pending">
+        <mat-card-content>
+          <div class="stat-icon">
+            <mat-icon>markunread_mailbox</mat-icon>
+          </div>
+          <div class="stat-info">
+            <h3>{{ stats.pendingParcels }}</h3>
+            <p>Pending Parcels</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Status Breakdown -->
+    <div class="breakdown-grid">
+      <mat-card>
+        <div class="card-header">
+          <h2>
+            <mat-icon>people</mat-icon>
+            Visitors by Status
+          </h2>
+        </div>
+        <mat-card-content>
+          <div class="status-list">
+            <div class="status-item" *ngFor="let item of stats.visitorsByStatus">
+              <app-status-badge [status]="$any(item.status)"></app-status-badge>
+              <span class="count">{{ item.count }}</span>
+            </div>
+            <div class="status-item" *ngIf="stats.visitorsByStatus.length === 0">
+              <span class="text-secondary">No visitor records</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <div class="card-header">
+          <h2>
+            <mat-icon>inventory_2</mat-icon>
+            Parcels by Status
+          </h2>
+        </div>
+        <mat-card-content>
+          <div class="status-list">
+            <div class="status-item" *ngFor="let item of stats.parcelsByStatus">
+              <app-status-badge [status]="$any(item.status)"></app-status-badge>
+              <span class="count">{{ item.count }}</span>
+            </div>
+            <div class="status-item" *ngIf="stats.parcelsByStatus.length === 0">
+              <span class="text-secondary">No parcel records</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Recent Activity -->
+    <mat-card>
+      <div class="card-header">
+        <h2>
+          <mat-icon>history</mat-icon>
+          Recent Activity
+        </h2>
+      </div>
+      <div class="card-content">
+        <app-empty-state
+          *ngIf="stats.recentActivity.length === 0"
+          icon="history"
+          title="No Recent Activity"
+          message="Recent visitor and parcel logs will appear here.">
+        </app-empty-state>
+
+        <div class="table-container" *ngIf="stats.recentActivity.length > 0">
+          <table mat-table [dataSource]="stats.recentActivity">
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef>ID</th>
+              <td mat-cell *matCellDef="let record">#{{ record.id }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="type">
+              <th mat-header-cell *matHeaderCellDef>Type</th>
+              <td mat-cell *matCellDef="let record">
+                <span class="type-badge" [ngClass]="record.type.toLowerCase()">
+                  <mat-icon>{{ record.type === 'VISITOR' ? 'person' : 'inventory_2' }}</mat-icon>
+                  {{ record.type }}
+                </span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Name</th>
+              <td mat-cell *matCellDef="let record">{{ record.name }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="resident_name">
+              <th mat-header-cell *matHeaderCellDef>Resident</th>
+              <td mat-cell *matCellDef="let record">
+                {{ record.resident_name }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let record">
+                <app-status-badge [status]="record.status"></app-status-badge>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="created_at">
+              <th mat-header-cell *matHeaderCellDef>Date</th>
+              <td mat-cell *matCellDef="let record">{{ formatDate(record.created_at) }}</td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+      </div>
+    </mat-card>
+  </ng-container>
+</div>
